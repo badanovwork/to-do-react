@@ -1,0 +1,32 @@
+.formAddTask{
+    margin:10px 0;
+}
+
+.formAddTask input {
+	width: 300px;
+	margin: 10px 5px;
+	font-size: 13px;
+	padding: 6px 0 4px 10px;
+	border: 1px solid #cecece;
+	background: #F6F6f6;
+	border-radius: 8px;
+}
+
+.submit {
+	cursor: pointer;
+	border: 1px solid #cecece;
+	background: #f6f6f6;
+	box-shadow: inset 0px 20px 20px #ffffff;
+	border-radius: 8px;
+    padding: 8px 14px;  
+    margin: 0 10px;
+	width: 60px;
+}
+.submit:hover {
+	box-shadow: inset 0px -20px 20px #ffffff;
+}
+.submit:active {
+	margin-top: 1px;
+	margin-bottom: -1px;
+	zoom: 1;
+}
