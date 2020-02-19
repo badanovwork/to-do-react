@@ -4,7 +4,7 @@ const optionsDate = {
     day: 'numeric'
 };
 
-const mockInitItems = [{
+const initItems = [{
         id: 5,
         task: `Vue2 in China`,
         date: new Date().toLocaleString("ru", optionsDate).toString(),
@@ -36,4 +36,4 @@ const mockInitItems = [{
     },
 ];
 
-export {mockInitItems, optionsDate};
+export {initItems, optionsDate};

@@ -4,32 +4,30 @@ import './FormFilter.css';
 class FormFilter extends React.Component {
     constructor(props) {
       super(props);
-      this.handleFilterChange = this.handleFilterChange.bind(this);
+      this.onChangeFilterText = this.onChangeFilterText.bind(this);
+      this.onChangeFilterDate = this.onChangeFilterDate.bind(this);
     }
-  
-    handleFilterChange = (event) => {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-        if(name === 'filterDate'){
-           const arrStr = value.split("-").reverse().join(".");
-           this.props.onFilterChange(arrStr, name);
-        }else{
-          this.props.onFilterChange(value, name);
-        }
+
+    onChangeFilterText(e) {
+      this.props.onChangeFilterText(e.target.value);
     }
-      
+
+    onChangeFilterDate(e) {
+      const reverseDate = e.target.value.split("-").reverse().join(".");
+      this.props.onChangeFilterDate(reverseDate);
+    }
+    
     render (){
-      const dateValue = this.props.filterDate.split(".").reverse().join("-")
+      const reverseDate = this.props.filterDate.split(".").reverse().join("-")
       return(   
       <form className="formFilter" ref="formFilter">
         <label >Сортировка задач</label>
         <br/>
         <label >по тексту:</label>
-        <input type="text" name="filterText" onChange={this.handleFilterChange}/>
+        <input type="text" value={this.props.filterText} onChange={this.onChangeFilterText}/>
         <br/>
-        <label >по дате:      </label>
-        <input type="date" value={dateValue} name="filterDate" onChange={this.handleFilterChange}></input>
+        <label >по дате: </label>
+        <input type="date" value={reverseDate} onChange={this.onChangeFilterDate}></input>
       </form>
       )
     }

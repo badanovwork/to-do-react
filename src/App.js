@@ -3,8 +3,7 @@ import './App.css';
 import TodoList from './components/todo-list/TodoList'
 import FormAddTask from './components/form-add-task/FormAddTask'
 import FormFilter from './components/form-filter/FormFilter'
-import {mockInitItems,optionsDate} from './mockInitItems'
-import sortInfo from './sortConfig'
+import {initItems, optionsDate} from './initItems'
 
 
 class TodoApp extends React.Component {
@@ -13,12 +12,11 @@ class TodoApp extends React.Component {
     this.addTask = this.addTask.bind(this);
     this.removeTask = this.removeTask.bind(this);
     this.doneTask = this.doneTask.bind(this);
-    this.handleFilterChange = this.handleFilterChange.bind(this);
-    this.onClickSort = this.onClickSort.bind(this);
+    this.onChangeFilterText = this.onChangeFilterText.bind(this);
+    this.onChangeFilterDate = this.onChangeFilterDate.bind(this);
 
     this.state = {
-      sortCols: [],
-      initItems: [],
+      taskItems: [],
       filterText: '',
       filterDate: ''
     }
@@ -26,101 +24,64 @@ class TodoApp extends React.Component {
 
   componentDidMount() {
     this.setState({
-      sortCols: sortInfo.columns,
-      initItems: localStorage.getItem("initItems") ? this.getItemLocalStorage() : mockInitItems,
-      filterDate: ""
+      taskItems: localStorage.getItem("taskItems") ? this.getItemLocalStorage() : initItems, 
     })
   }
 
-  getItemLocalStorage(){
-    const localStorageItem = JSON.parse(localStorage.getItem("initItems"));
-    return localStorageItem;
+  getItemLocalStorage() {
+    return JSON.parse(localStorage.getItem("taskItems"));
   }
 
-  setItemLocalStorage(value){
-    const localStorageItem =  JSON.stringify(value)
-    localStorage.setItem('initItems', localStorageItem);
+  setItemLocalStorage(value) {
+    const localStorageItems =  JSON.stringify(value)
+    localStorage.setItem('taskItems', localStorageItems);
   }
 
-  addTask(task,date) {
-    if (task) {
-      this.state.initItems.unshift({
-        id: this.state.initItems.length + 1,
-        task: task,
-        date: new Date(date).toLocaleString("ru", optionsDate).toString(),
-        done: true
-      });
-    } 
-    this.setState({
-      initItems: this.state.initItems,
+  addTask(textValue, dateValue) {
+    const results = this.state.taskItems;
+    const lastTaskItem = this.state.taskItems.find(item => item.id >= this.state.taskItems.length)
+    results.unshift({
+      id: lastTaskItem.id + 1,
+      task: textValue,
+      date: new Date(dateValue).toLocaleString("ru", optionsDate).toString(),
+      done: true
     });
-    this.setItemLocalStorage(this.state.initItems)
+    this.setState({
+      taskItems: results,
+    });
+    this.setItemLocalStorage(this.state.taskItems)
   }
 
   removeTask(value) {
-    const results = this.state.initItems.filter(function (item) {
-      return item.id !== value;
-    });
+    const results = this.state.taskItems.filter(item => item.id !== value);
     this.setState({
-      initItems: results
+      taskItems: results
     });
     this.setItemLocalStorage(results)
   }
 
   doneTask(value) {
-    const results = this.state.initItems.map((item) => {
+    const results = this.state.taskItems.map(item => { 
       if (item.id === value) {
         item.done = !item.done;
       }
       return item;
     })
     this.setState({
-      initItems: results
+      taskItems: results
     })
     this.setItemLocalStorage(results)
   }
 
-  handleFilterChange(value, name) {
+  onChangeFilterText(value) {
     this.setState({
-      [name]: value
+      filterText: value
     });
   }
 
-  getSortColByName(cols, name) {
-    for (let i = 0; i < cols.length; i++) {
-      if (cols[i].colName === name) {
-        return cols[i];
-      }
-    };
-    return null;
-  }
-
-  resetSort(cols, name) {
-    for (let i = 0; i < cols.length; i++) {
-      if (cols[i].colName !== name) {
-        cols[i].sort = "";
-      }
-    };
-  }
-
-  onClickSort(colName) {
-    const cols = this.state.sortCols;
-    let col = this.getSortColByName(cols, colName);
-    if (col.sort !== "") {
-      if (col.sort === "Asc") {
-        col.sort = "Desc";
-      } else {
-        col.sort = "Asc";
-      }
-    } else {
-      col.sort = "Asc";
-      this.resetSort(cols, colName);
-    }
-
-    const rows = this.state.initItems;
-    col.funcSort(rows);
+  onChangeFilterDate(value) {
     this.setState({
-      sortCols: cols
+      filterDate: value
     });
   }
 
@@ -129,19 +90,18 @@ class TodoApp extends React.Component {
       <div className="main">
         <div className="main-header">To-Do App</div>
         <FormAddTask 
-          addTask={this.addTask} 
+          addTask = {this.addTask} 
           filterDate = {this.state.filterDate}  />
         <FormFilter
           filterDate = {this.state.filterDate}  
-          onFilterChange={this.handleFilterChange} />
+          onChangeFilterDate = {this.onChangeFilterDate} 
+          onChangeFilterText = {this.onChangeFilterText} />
         <TodoList 
-          initItems = {this.state.initItems}
+          taskItems = {this.state.taskItems}
           filterText = {this.state.filterText}
           filterDate = {this.state.filterDate}
           removeTask = {this.removeTask}
-          doneTask = {this.doneTask} 
-          onClickSort = {this.onClickSort}
-          sortCols={this.state.sortCols} />
+          doneTask = {this.doneTask} />
       </div>
     )
   }

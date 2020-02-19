@@ -2,20 +2,59 @@ import React from 'react';
 import './TodoList.css';
 
 import TodoRow from '../todo-row/TodoRow'
-import SortButton from '../sort-button/SortButton'
 
 
 class TodoList extends React.Component {
+  constructor(props){
+    super(props);
+    this.onClickSortText = this.onClickSortText.bind(this);
+    this.onClickSortDate= this.onClickSortDate.bind(this);
+
+    this.state = {
+      sortText: null,
+      sortDate: null,
+    }
+  }
+
+  onClickSortText(){
+    this.setState({
+      sortText: !this.state.sortText
+    })
+  }
+
+   onClickSortDate(){
+    this.setState({
+      sortDate: !this.state.sortDate
+    })
+  }
+
   render() {
   const rows = [];
-  const filterText = this.props.filterText;
-  const filterDate = this.props.filterDate;
-  const onClick = this.props.onClickSort;
-  this.props.initItems.forEach((item) => {
-    if (!item.task.toLowerCase().includes(filterText)) {
+  if(this.state.sortText){
+    this.props.taskItems.sort(function (a, b) {
+      return a.task.localeCompare(b.task)
+    })
+  }else {
+    this.props.taskItems.sort(function (a, b) {
+      return -a.task.localeCompare(b.task)
+    })
+  }
+
+  if(this.state.sortDate){
+    this.props.taskItems.sort(function (a, b) {
+      return a.date.localeCompare(b.date)
+    })
+  }else {
+    this.props.taskItems.sort(function (a, b) {
+      return -a.date.localeCompare(b.date)
+    })
+  }
+
+  this.props.taskItems.forEach((item) => {
+    if (!item.task.toLowerCase().includes(this.props.filterText)) {
       return;
     }
-    if (item.date !== filterDate && filterDate !== '') {
+    if (item.date !== this.props.filterDate && this.props.filterDate !== '') {
       return;
     }
     rows.push(
@@ -27,19 +66,12 @@ class TodoList extends React.Component {
             doneTask={this.props.doneTask} />
     );
   });
-  const sortCols = [];
-  this.props.sortCols.forEach(function (item, index) {
-    sortCols.push(
-      <th key={index}>{item.colName}
-        <SortButton colName={item.colName} sort={item.sort} onClickSort={onClick}/>
-      </th>
-    );
-  });
   return (
       <table>
         <thead>
           <tr>
-          {sortCols}
+            <th onClick={this.onClickSortText}>name</th>
+            <th onClick={this.onClickSortDate}>date</th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>
