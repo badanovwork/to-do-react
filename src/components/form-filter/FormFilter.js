@@ -21,7 +21,7 @@ class FormFilter extends React.Component {
       const reverseDate = this.props.filterDate.split(".").reverse().join("-")
       return(   
       <form className="formFilter" ref="formFilter">
-        <label >Сортировка задач</label>
+        <label >Фильтр задач</label>
         <br/>
         <label >по тексту:</label>
         <input type="text" value={this.props.filterText} onChange={this.onChangeFilterText}/>
