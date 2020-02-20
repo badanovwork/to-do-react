@@ -7,98 +7,48 @@ import TodoRow from '../todo-row/TodoRow'
 class TodoList extends React.Component {
   constructor(props) {
     super(props);
-    this.onClickSortText = this.onClickSortText.bind(this);
-    this.onClickSortDate = this.onClickSortDate.bind(this);
-
-    this.state = {
-      sortText: { isCurrent: null, desc: null },
-      sortDate: { isCurrent: null, desc: null },
-    }
+    this.sorted = { task: false, date: false };
   }
 
-  onClickSortText() {
-    if (this.state.sortDate.isCurrent) {
-      this.setState({
-        sortDate: { isCurrent: false, desc: null }
-      });
-    }
-
-    this.setState({
-      sortText: { isCurrent: true, desc: !this.state.sortText.desc }
+  onClickSort(type) {
+    const { update, taskItems } = this.props;
+    const isSorted = this.sorted[type];
+    let direction = isSorted ? 1 : -1;
+    const sorted = taskItems.sort((a, b) => {
+      if (a[type] === b[type]) { return 0; }
+      console.log(direction)
+      return a[type] > b[type] ? direction : direction * -1;
+    });
+    this.sorted[type] = !isSorted;
+    update({
+      taskItems: sorted
     });
   }
 
-  onClickSortDate() {
-    if (this.state.sortText.isCurrent) {
-      this.setState({
-        sortText: { isCurrent: false, desc: null }
-      });
-    }
-
-    this.setState({
-      sortDate: { isCurrent: true, desc: !this.state.sortDate.desc }
-    });
-  }
-
-  sortByText(desc) {
-    if (desc) {
-      this.props.taskItems.sort(function (a, b) {
-        return a.task.localeCompare(b.task)
-      });
-      return;
-    }
-
-    this.props.taskItems.sort(function (a, b) {
-      return -a.task.localeCompare(b.task)
-    });
-  }
-
-  sortByDate(desc) {
-    if (desc) {
-      this.props.taskItems.sort(function (a, b) {
-        return a.date.localeCompare(b.date)
-      });
-      return;
-    }
-
-    this.props.taskItems.sort(function (a, b) {
-      return -a.date.localeCompare(b.date)
+  filterTaskList() {
+    const { taskItems, filterText, filterDate, removeTask, doneTask } = this.props;
+    return taskItems.map((item) => {
+      if ((!filterDate || item.date === filterDate) && (!filterText || item.task.toLowerCase().includes(filterText.toLowerCase()))) {
+        return (<TodoRow
+          key={item.id}
+          item={item}
+          index={item.id}
+          removeTask={removeTask}
+          doneTask={doneTask} />);
+      }
     });
   }
 
   render() {
-    const rows = [];
-
-    this.state.sortText.isCurrent
-      ? this.sortByText(!this.state.sortText.desc)
-      : this.sortByDate(!this.state.sortDate.desc);
-
-    this.props.taskItems.forEach((item) => {
-      if (!item.task.toLowerCase().includes(this.props.filterText)) {
-        return;
-      }
-      if (item.date !== this.props.filterDate && this.props.filterDate !== '') {
-        return;
-      }
-      rows.push(
-        <TodoRow
-          key={item.id}
-          item={item}
-          index={item.id}
-          removeTask={this.props.removeTask}
-          doneTask={this.props.doneTask} />
-      );
-    });
-
     return (
       <table>
         <thead>
           <tr>
-            <th onClick={this.onClickSortText}>name</th>
-            <th onClick={this.onClickSortDate}>date</th>
+            <th onClick={() => this.onClickSort('task')}>Задача</th>
+            <th onClick={() => this.onClickSort('date')}>Дата</th>
           </tr>
         </thead>
-        <tbody>{rows}</tbody>
+        <tbody>{this.filterTaskList()}</tbody>
       </table>
     )
   }

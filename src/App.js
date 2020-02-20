@@ -3,7 +3,7 @@ import './App.css';
 import TodoList from './components/todo-list/TodoList'
 import FormAddTask from './components/form-add-task/FormAddTask'
 import FormFilter from './components/form-filter/FormFilter'
-import {initItems, optionsDate} from './initItems'
+import { initItems, optionsDate } from './initItems'
 
 
 class TodoApp extends React.Component {
@@ -14,6 +14,7 @@ class TodoApp extends React.Component {
     this.doneTask = this.doneTask.bind(this);
     this.onChangeFilterText = this.onChangeFilterText.bind(this);
     this.onChangeFilterDate = this.onChangeFilterDate.bind(this);
+    this.update = this.update.bind(this);
 
     this.state = {
       taskItems: [],
@@ -24,7 +25,7 @@ class TodoApp extends React.Component {
 
   componentDidMount() {
     this.setState({
-      taskItems: localStorage.getItem("taskItems") ? this.getItemLocalStorage() : initItems, 
+      taskItems: localStorage.getItem("taskItems") ? this.getItemLocalStorage() : initItems,
     })
   }
 
@@ -33,7 +34,7 @@ class TodoApp extends React.Component {
   }
 
   setItemLocalStorage(value) {
-    const localStorageItems =  JSON.stringify(value)
+    const localStorageItems = JSON.stringify(value)
     localStorage.setItem('taskItems', localStorageItems);
   }
 
@@ -61,7 +62,7 @@ class TodoApp extends React.Component {
   }
 
   doneTask(value) {
-    const results = this.state.taskItems.map(item => { 
+    const results = this.state.taskItems.map(item => {
       if (item.id === value) {
         item.done = !item.done;
       }
@@ -84,24 +85,28 @@ class TodoApp extends React.Component {
       filterDate: value
     });
   }
+  update(data){
+    this.setState(data)
+  }
 
-  render(){
+  render() {
     return (
       <div className="main">
         <div className="main-header">To-Do App</div>
-        <FormAddTask 
-          addTask = {this.addTask} 
-          filterDate = {this.state.filterDate}  />
+        <FormAddTask
+          addTask={this.addTask}
+          filterDate={this.state.filterDate} />
         <FormFilter
-          filterDate = {this.state.filterDate}  
-          onChangeFilterDate = {this.onChangeFilterDate} 
-          onChangeFilterText = {this.onChangeFilterText} />
-        <TodoList 
-          taskItems = {this.state.taskItems}
-          filterText = {this.state.filterText}
-          filterDate = {this.state.filterDate}
-          removeTask = {this.removeTask}
-          doneTask = {this.doneTask} />
+          filterDate={this.state.filterDate}
+          onChangeFilterDate={this.onChangeFilterDate}
+          onChangeFilterText={this.onChangeFilterText} />
+        <TodoList
+          taskItems={this.state.taskItems}
+          filterText={this.state.filterText}
+          filterDate={this.state.filterDate}
+          removeTask={this.removeTask}
+          doneTask={this.doneTask} 
+          update = {this.update}/>
       </div>
     )
   }

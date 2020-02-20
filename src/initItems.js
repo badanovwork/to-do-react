@@ -12,13 +12,13 @@ const initItems = [{
     },
     {
         id: 4,
-        task: `Vue3 in China`,
+        task: `Vue in China`,
         date: new Date().toLocaleString("ru", optionsDate).toString(),
         done: true
     },
     {
         id: 3,
-        task: `Vue in China`,
+        task: `Vue3 in China`,
         date: new Date(2020, 1, 15).toLocaleString("ru", optionsDate).toString(),
         done: true
     },
