@@ -1,8 +1,6 @@
 import React from 'react';
 import './TodoList.css';
-
 import TodoRow from '../todo-row/TodoRow'
-
 
 class TodoList extends React.Component {
   constructor(props) {
@@ -27,16 +25,16 @@ class TodoList extends React.Component {
 
   filterTaskList() {
     const { taskItems, filterText, filterDate, removeTask, doneTask } = this.props;
-    return taskItems.map((item) => {
-      if ((!filterDate || item.date === filterDate) && (!filterText || item.task.toLowerCase().includes(filterText.toLowerCase()))) {
+    return taskItems
+      .filter(item => (!filterDate || item.date === filterDate) && (!filterText || item.task.toLowerCase().includes(filterText.toLowerCase())))
+      .map((item) => {
         return (<TodoRow
           key={item.id}
           item={item}
           index={item.id}
           removeTask={removeTask}
           doneTask={doneTask} />);
-      }
-    });
+      });
   }
 
   render() {
