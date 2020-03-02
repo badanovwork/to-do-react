@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux'
+import { removeTodo, doneTodo } from '../../redux/actions'
 
 class TodoRow extends React.Component {
   constructor(props) {
@@ -9,12 +11,12 @@ class TodoRow extends React.Component {
 
   onClickClose() {
     const index = parseInt(this.props.index);
-    this.props.removeTask(index);
+    this.props.removeTodo(index);
   }
 
   onClickDone() {
     const index = parseInt(this.props.index);
-    this.props.doneTask(index);
+    this.props.doneTodo(index);
   }
 
   render() {
@@ -30,4 +32,4 @@ class TodoRow extends React.Component {
   }
 }
 
-export default TodoRow;
+export default connect(null, { removeTodo, doneTodo })(TodoRow);

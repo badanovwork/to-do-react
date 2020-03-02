@@ -1,5 +1,7 @@
 import React from 'react';
 import './FormFilter.css';
+import { connect } from 'react-redux'
+import { onChangeFilterText, onChangeFilterDate } from '../../redux/actions'
 
 class FormFilter extends React.Component {
   constructor(props) {
@@ -33,4 +35,11 @@ class FormFilter extends React.Component {
   }
 }
 
-export default FormFilter;
+function mapStateToProps(state) {
+  return {
+    filterText: state.filterText,
+    filterDate: state.filterDate
+  }
+}
+
+export default connect(mapStateToProps, { onChangeFilterText, onChangeFilterDate })(FormFilter);

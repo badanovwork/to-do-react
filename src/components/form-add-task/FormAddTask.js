@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux'
+import { addTodo } from '../../redux/actions'
 import './FormAddTask.css';
 
 class FormAddTask extends React.Component {
@@ -24,7 +26,7 @@ class FormAddTask extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    this.props.addTask(this.state.textValue, this.state.dateValue);
+    this.props.addTodo(this.state.textValue, this.state.dateValue);
   }
 
   render() {
@@ -32,11 +34,11 @@ class FormAddTask extends React.Component {
       <form className="formAddTask" onSubmit={this.onSubmit}>
         <input required type="text" value={this.state.textValue} onChange={this.onChangeText} placeholder="добавить задачу ..." />
         <br />
-        <input required type="date" value={this.state.textDate} onChange={this.onChangeDate}></input>
+        <input required type="date" value={this.state.dateValue} onChange={this.onChangeDate}></input>
         <input type="submit" className="submit" value="добавить" />
       </form>
     )
   }
 }
 
-export default FormAddTask;
+export default connect(null, { addTodo })(FormAddTask);
