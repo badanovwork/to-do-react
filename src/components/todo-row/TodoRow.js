@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { removeTodo, doneTodo } from '../../redux/actions'
 
@@ -30,6 +31,13 @@ class TodoRow extends React.Component {
       </tr>
     )
   }
+}
+
+TodoRow.propTypes = {
+  index: propTypes.number,
+  item: propTypes.object,
+  removeTodo: propTypes.func,
+  doneTodo: propTypes.func,
 }
 
 export default connect(null, { removeTodo, doneTodo })(TodoRow);

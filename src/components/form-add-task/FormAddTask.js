@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addTodo } from '../../redux/actions'
 import './FormAddTask.css';
@@ -39,6 +40,10 @@ class FormAddTask extends React.Component {
       </form>
     )
   }
+}
+
+FormAddTask.propTypes = {
+  addTodo: propTypes.func
 }
 
 export default connect(null, { addTodo })(FormAddTask);

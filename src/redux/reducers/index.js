@@ -49,7 +49,7 @@ function sortTodo(state, action) {
     const isSorted = state[type];
     let direction = isSorted ? 1 : -1;
     const sorted = state.todos.sort((a, b) => {
-        if (a[type] === b[type]) { return console.log(1); }
+        if (a[type] === b[type]) { return 1}
         return a[type] > b[type] ? direction : direction * -1;
     });
     state[type] = !isSorted;

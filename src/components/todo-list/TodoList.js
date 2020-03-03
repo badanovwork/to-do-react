@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types'
 import './TodoList.css';
 import TodoRow from '../todo-row/TodoRow'
 import { connect } from 'react-redux';
@@ -28,6 +29,15 @@ class TodoList extends React.Component {
       </table>
     )
   }
+}
+
+TodoList.propTypes = {
+  taskItems: propTypes.arrayOf(propTypes.object),
+  filterText: propTypes.string,
+  filterDate: propTypes.string,
+  task: propTypes.bool,
+  date: propTypes.bool,
+  sortTodo: propTypes.func
 }
 
 function mapStateToProps(state) {
